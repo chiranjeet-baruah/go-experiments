@@ -2,6 +2,7 @@ package goWaitGroup
 
 import (
 	"fmt"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -9,18 +10,19 @@ import (
 // RunWaitGroupExample runs wait group example
 func RunGoWaitGroupExample() {
 	var wg sync.WaitGroup
-	animals := []string{"dog", "cat", "monkey", "donkey", "elephant"}
-	for i, animal := range animals {
-		wg.Add(1) // creates one entry for each
-		go doSomethingWaitGroup(animal, i+1, &wg)
+	worker_count := 10
+	for i := 1; i <= worker_count; i++ {
+		wg.Add(1)
+		go doSomethingWaitGroup(i, &wg)
+		time.Sleep(time.Duration(rand.Intn(5-1)+1) * time.Second)
 	}
-	wg.Wait() // waits for all tasks to get over
+	wg.Wait()
+	fmt.Println("All workers have completed")
 }
 
-func doSomethingWaitGroup(thing string, count int, wg *sync.WaitGroup) {
-	for i := 1; i <= count; i++ {
-		fmt.Println(i+1, thing)
-		time.Sleep(time.Millisecond * 500)
-	}
-	wg.Done()
+func doSomethingWaitGroup(worker_id int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	fmt.Println("Started worker : ", worker_id)
+	time.Sleep(time.Duration(rand.Intn(10-5)+5) * time.Second)
+	fmt.Println("Finished worker : ", worker_id)
 }
