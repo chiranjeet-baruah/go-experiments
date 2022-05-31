@@ -1,12 +1,10 @@
 package main
 
-import "github.com/go-experiments/goWaitGroup"
-
-// import (
-// "github.com/go-experiments/goChannels"
-// "github.com/go-experiments/goRoutine"
-// "github.com/go-experiments/goWaitGroup"
-// )
+import (
+	"github.com/go-experiments/goChannels"
+	// "github.com/go-experiments/goRoutine"
+	// "github.com/go-experiments/goWaitGroup"
+)
 
 func main() {
 
@@ -14,10 +12,10 @@ func main() {
 	// goRoutine.RunGoRoutineExample()
 
 	// // Run wait group example
-	goWaitGroup.RunGoWaitGroupExample()
+	// goWaitGroup.RunGoWaitGroupExample()
 
 	// // Run goChannel example
-	// goChannels.RunGoChannelsExample()
+	goChannels.RunGoChannelsExample()
 
 	// // Run goMultiChannel example
 	// goChannels.RunGoMultiChannelsExample()
