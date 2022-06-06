@@ -30,7 +30,7 @@ func waiter(order_channel *chan Order, online_waiters *int, quitShop *chan bool)
 	for {
 		select {
 		case status := <-*quitShop:
-			if !status {
+			if status {
 				return
 			}
 		case order := <-*order_channel:
@@ -49,7 +49,7 @@ func shopOpen(order_channel *chan Order, quitShop *chan bool) {
 	for {
 		select {
 		case status := <-*quitShop:
-			if !status {
+			if status {
 				fmt.Println("Shop is closing soon...")
 				return
 			}
@@ -70,7 +70,7 @@ func startWaiters(max_waiters int, order_channel *chan Order, online_waiters *in
 	for {
 		select {
 		case status := <-*quitShop:
-			if !status {
+			if status {
 				fmt.Println("All waiters are going offline...")
 				*online_waiters = 0
 				return
