@@ -29,8 +29,10 @@ func waiter(order_channel *chan Order, online_waiters *int, quitShop *chan bool)
 	*online_waiters++
 	for {
 		select {
-		case <-*quitShop:
-			return
+		case status := <-*quitShop:
+			if !status {
+				return
+			}
 		case order := <-*order_channel:
 			fmt.Println("Received order : ", order.item, " from customer : ", order.customer_id, " by waiter : ", waiter_id, " STARTED WORKING")
 			time.Sleep(time.Duration(rand.Intn(15-10)+10) * time.Second)
@@ -46,9 +48,11 @@ func waiter(order_channel *chan Order, online_waiters *int, quitShop *chan bool)
 func shopOpen(order_channel *chan Order, quitShop *chan bool) {
 	for {
 		select {
-		case <-*quitShop:
-			fmt.Println("Shop is closing soon...")
-			return
+		case status := <-*quitShop:
+			if !status {
+				fmt.Println("Shop is closing soon...")
+				return
+			}
 		default:
 			item_list := []string{"banana", "apple", "oranges", "grapes", "coconut", "watermelon"}
 			for {
@@ -65,10 +69,12 @@ func shopOpen(order_channel *chan Order, quitShop *chan bool) {
 func startWaiters(max_waiters int, order_channel *chan Order, online_waiters *int, quitShop *chan bool) {
 	for {
 		select {
-		case <-*quitShop:
-			fmt.Println("All waiters are going offline...")
-			*online_waiters = 0
-			return
+		case status := <-*quitShop:
+			if !status {
+				fmt.Println("All waiters are going offline...")
+				*online_waiters = 0
+				return
+			}
 		default:
 			ticker := time.NewTicker(500 * time.Millisecond)
 			for range ticker.C {
@@ -97,6 +103,6 @@ func RunGoChannelsExample() {
 	<-quit
 	quitShop <- true
 	fmt.Println("Closing shop...")
-	time.Sleep(5 * time.Second)
+	time.Sleep(10 * time.Second)
 	fmt.Println("Shop closed")
 }

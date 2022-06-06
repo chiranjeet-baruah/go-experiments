@@ -34,7 +34,7 @@ func RunGoJobWorkersExample() {
 	results := make(chan CustomResults, 100)
 
 	job_count := 100
-	worker_count := 5
+	worker_count := 15
 
 	// // Spawn Job workers
 	for w := 1; w <= worker_count; w++ {
